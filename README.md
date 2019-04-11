@@ -1,1 +1,1 @@
-# release
+# release automation script
