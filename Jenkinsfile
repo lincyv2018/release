@@ -2,16 +2,18 @@ pipeline{
     agent{
         label "master"
     }
+    parameters {
+        string(name: "message" defaultValue: "Release message" description: " start messagee" )
+        choise(name: "release type")
+    }
     stages{
         stage("Send Notification"){
             steps{
                    
                 sh '''
-                python /scripts/custom_start.py "Starting RC "
+                python /scripts/custom_start.py ${params.message}
                 
-                '''
-                
-                
+                '''       
             }
         } 
         stage("geting the server status"){
@@ -20,9 +22,7 @@ pipeline{
                        sh '''
                         web_server_bot=$(curl -s --netrc-file /scripts/rc.netrc https://172.20.6.52:8080/api/3/http/upstreams/web_servers_bot)
                         echo $web_server_bot
-                        '''
-            
-                   
+                        '''                   
                 }
              }
             stage("bring the servers up"){
